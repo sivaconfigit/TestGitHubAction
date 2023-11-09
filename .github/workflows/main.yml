@@ -1,4 +1,4 @@
-name: Delete Branches
+name: Delete Stale Branches
 
 on:
   schedule:
@@ -20,4 +20,4 @@ jobs:
         tag-committer: false
         stale-branch-label: 'stale branch 🗑️'
         compare-branches: 'info'
-        branches-filter-regex: '^((?!dependabot))'
+        branches-filter-regex: '^(?!main$).*$'  # Exclude the 'main' branch

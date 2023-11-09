@@ -1,39 +1,28 @@
-
 name: Delete Branches
 
 on:
-  schedule:  
-   - cron: '49 6 * * *'
+  schedule:
+    - cron: '49 6 * * *'  # Set your desired schedule (e.g., daily at 6:49 AM UTC)
+
 jobs:
-
   delete-branches:
-
     runs-on: windows-latest
 
     steps:
-
       - name: Checkout code
-
         uses: actions/checkout@v2
 
       - name: Delete branches
-
         run: |
-
           $EXCLUDE_BRANCHES = @("main", "master", "develop", "release")
- 
-          Get-ChildItem -Path "refs/heads/" -Filter "*.git" | ForEach-Object {
 
-            $branch = $_.Name -replace ".git"
+          Get-ChildItem -Path "refs/heads/" | ForEach-Object {
+            $branch = $_.Name
+            $branchName = $branch -replace "refs/heads/"
 
-            if ($EXCLUDE_BRANCHES -notcontains $branch) {
-
-              git push origin --delete $branch
-
+            if ($EXCLUDE_BRANCHES -notcontains $branchName) {
+              git push origin --delete $branchName
             }
-
           }
-
         env:
-
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TZ: UTC

@@ -6,27 +6,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  delete-branches:
+  stale_branches:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Check Excluded Branches
-        run: |
-          EXCLUDE_BRANCHES=("main" "master")
-          echo "Excluded branches: ${EXCLUDE_BRANCHES[@]}"
-
-      - name: Delete branches
-        run: |
-          EXCLUDE_BRANCHES=("main" "master")
-        
-          for branch in $(git for-each-ref --format '%(refname:short)' refs/heads/); do
-            if [[ ! " ${EXCLUDE_BRANCHES[*]} " =~ " ${branch} " ]]; then
-              git push origin --delete $branch
-            fi
-          done
-        env:
-          TZ: Asia/Kolkata
-          GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
+    - name: Stale Branches
+      uses: crs-k/stale-branches@v3.0.0
+      with:
+        repo-token: '${{ secrets.GITHUB_TOKEN }}'
+        days-before-stale: 120
+        days-before-delete: 180
+        comment-updates: false
+        max-issues: 20
+        tag-committer: false
+        stale-branch-label: 'stale branch 🗑️'
+        compare-branches: 'info'
+        branches-filter-regex: '^((?!dependabot))'

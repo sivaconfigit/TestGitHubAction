@@ -2,7 +2,7 @@ name: Delete Branches
 
 on:
   schedule:
-    - cron: '12 14 * * *'
+    - cron: '17 14 * * *'
 
 jobs:
   delete-branches:
@@ -23,10 +23,11 @@ jobs:
         run: |
           EXCLUDE_BRANCHES=("main" "master" "develop" "release")
  
-          for branch in $(git for-each-ref --format '%(refname:short)' refs/heads/); do
-            if [[ ! " ${EXCLUDE_BRANCHES[*]} " =~ " ${branch} " ]]; then
-              git push origin --delete $branch
-            fi
-          done
+             Get-ChildItem -Path "refs/heads/" | ForEach-Object {
+            $branch = $_.Name
+            $branchName = $branch -replace "refs/heads/"
+            if ($EXCLUDE_BRANCHES -notcontains $branchName) {
+              git push origin --delete $branchName
+            }
         env:
           GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }

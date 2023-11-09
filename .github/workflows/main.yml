@@ -2,7 +2,7 @@ name: Delete Branches
 
 on:
   schedule:
-    - cron: '5 8 * * *'  # Schedule it at 2:00 PM IST
+    - cron: '12 14 * * *'
 
 jobs:
   delete-branches:

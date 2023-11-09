@@ -2,25 +2,22 @@ name: Delete Stale Branches
 
 on:
   schedule:
-    - cron: '25 15 * * *'
+    - cron: '25 10 * * *'  # Adjust the cron timing to 4:25 IST
   workflow_dispatch:
-
 
 jobs:
   stale_branches:
     runs-on: ubuntu-latest
     steps:
-    - name: Stale Branches
-      uses: crs-k/stale-branches@v3.0.0
-      with:
-        repo-token: '${{ secrets.GITHUB_TOKEN }}'
-        days-before-stale: 0
-        days-before-delete: 0
-        comment-updates: false
-        max-issues: 20
-        tag-committer: false
-        stale-branch-label: 'stale branch 🗑️'
-        compare-branches: 'info'
-        branches-filter-regex: '^(?!main$).*$'  # Exclude the 'main' branch
-    env:
-        TZ: Asia/Kolkata
+      - name: Stale Branches
+        uses: crs-k/stale-branches@v3.0.0
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          days-before-stale: 0
+          days-before-delete: 0
+          comment-updates: false
+          max-issues: 20
+          tag-committer: false
+          stale-branch-label: 'stale branch 🗑️'
+          compare-branches: 'info'
+          branches-filter-regex: '^(?!main$).*$'  # Exclude the 'main' branch

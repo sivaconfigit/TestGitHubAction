@@ -4,6 +4,7 @@ on:
   schedule:
     - cron: '25 15 * * *'
   workflow_dispatch:
+
 jobs:
   stale_branches:
     runs-on: ubuntu-latest

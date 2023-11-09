@@ -2,7 +2,7 @@ name: Delete Branches
 
 on:
   schedule:
-    - cron: '59 6 * * *'  # Set your desired schedule (e.g., daily at 6:49 AM UTC)
+    - cron: '30 8 * * *'  # Set your desired schedule (e.g., daily at 6:49 AM UTC)
 
 jobs:
   delete-branches:
@@ -25,4 +25,4 @@ jobs:
             }
           }
         env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}

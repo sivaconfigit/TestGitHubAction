@@ -9,20 +9,18 @@ on:
     - cron: '25 15 * * *'
 
 jobs:
-  cleanup_old_branches:
+  stale_branches:
     runs-on: ubuntu-latest
-    name: Satisfy my repo CDO
     steps:
-      - name: Delete those pesky dead branches
-        uses: phpdocker-io/github-actions-delete-abandoned-branches@v2
-        id: delete_stuff
+      - name: Stale Branches
+        uses: crs-k/stale-branches@v3.0.0
         with:
-          github_token: ${{ github.token }}
-          last_commit_age_days: 0
-          ignore_branches: next-version,dont-deleteme
-          github_base_url: https://github.mycompany.com/api/v3
-          # Disable dry run and actually get stuff deleted
-          dry_run: no
-
-      - name: Get output
-        run: "echo 'Deleted branches: ${{ steps.delete_stuff.outputs.deleted_branches }}'"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          days-before-stale: 1
+          days-before-delete: 0
+          comment-updates: false
+          max-issues: 20
+          tag-committer: false
+          stale-branch-label: 'stale branch 🗑️'
+          compare-branches: 'info'
+          branches-filter-regex: '^(?!main$).*$'  # Exc

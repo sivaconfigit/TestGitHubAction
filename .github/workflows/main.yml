@@ -2,7 +2,7 @@ name: Delete Stale Branches
 
 on:
   schedule:
-    - cron: '25 10 * * *'  # Adjust the cron timing to 4:25 IST
+    - cron: '25 15 * * *'
   workflow_dispatch:
 
 jobs:

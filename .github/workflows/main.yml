@@ -3,6 +3,7 @@ name: Delete Branches
 on:
   schedule:
     - cron: '40 9 * * *'
+  workflow_dispatch:
 
 jobs:
   delete-branches:

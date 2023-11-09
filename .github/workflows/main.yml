@@ -3,8 +3,8 @@ name: Delete Branches
 on:
   push:
     branches:
-      - master
       - main
+      - master
   schedule:
     - cron: '25 15 * * *'
 
@@ -17,14 +17,15 @@ jobs:
         run: |
           EXCLUDE_BRANCHES=("main" "master")
 
+          # Fetch all branches
+          git fetch --prune
+
+          # Loop through branches
           for branch in $(git for-each-ref --format '%(refname:short)' refs/heads/); do
+            # Check if the branch should be excluded
             if [[ ! " ${EXCLUDE_BRANCHES[*]} " =~ " ${branch} " ]]; then
-              lastCommitDate=$(git log -n 1 --format=%cd --date=local $branch)
-              lastCommitAge=$(($(date +%s) - $(date -d "$lastCommitDate" +%s)) / 86400)
-              
-              if [ $lastCommitAge -eq 0 ]; then
-                git push origin --delete $branch
-              fi
+              # Delete the branch
+              git push origin --delete $branch
             fi
           done
         env:

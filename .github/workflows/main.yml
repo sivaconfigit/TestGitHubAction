@@ -2,27 +2,31 @@ name: Delete Branches
 
 on:
   schedule:
-    - cron: '30 8 * * *'  # Set your desired schedule (e.g., daily at 6:49 AM UTC)
+    - cron: '5 8 * * *'  # Schedule it at 2:00 PM IST
 
 jobs:
   delete-branches:
-    runs-on: windows-latest
-
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
+      - name: Use Node.js 16
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+          
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Delete branches
         run: |
-          $EXCLUDE_BRANCHES = @("main", "master", "develop", "release")
-
-          Get-ChildItem -Path "refs/heads/" | ForEach-Object {
-            $branch = $_.Name
-            $branchName = $branch -replace "refs/heads/"
-
-            if ($EXCLUDE_BRANCHES -notcontains $branchName) {
-              git push origin --delete $branchName
-            }
-          }
+          EXCLUDE_BRANCHES=("main" "master" "develop" "release")
+ 
+          for branch in $(git for-each-ref --format '%(refname:short)' refs/heads/); do
+            if [[ ! " ${EXCLUDE_BRANCHES[*]} " =~ " ${branch} " ]]; then
+              git push origin --delete $branch
+            fi
+          done
         env:
-           GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }

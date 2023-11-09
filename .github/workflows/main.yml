@@ -2,7 +2,7 @@ name: Delete Stale Branches
 
 on:
   schedule:
-    - cron: '25 15 * * *'
+    - cron: '52 16 * * *'
   workflow_dispatch:
 
 jobs:

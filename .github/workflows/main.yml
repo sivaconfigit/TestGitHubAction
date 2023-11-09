@@ -2,7 +2,8 @@ name: Delete Branches
 
 on:
   schedule:
-    - cron: '20 9 * * * '
+    - cron: '20 9 * * *'
+  workflow_dispatch:
 
 jobs:
   delete-branches:
@@ -24,3 +25,4 @@ jobs:
         env:
           TZ: UTC
           GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
+give 3.05 pm in cors

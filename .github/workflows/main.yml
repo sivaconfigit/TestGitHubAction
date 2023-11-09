@@ -5,6 +5,7 @@ on:
     - cron: '52 16 * * *'
   workflow_dispatch:
 
+
 jobs:
   stale_branches:
     runs-on: ubuntu-latest

@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Satisfy my repo CDO
     steps:
-      - name: Delete branches with no commits in the last 7 days
+      - name: Delete branches with no commits in the last 0 days
         uses: phpdocker-io/github-actions-delete-abandoned-branches@v2
         id: delete_stuff
         with:

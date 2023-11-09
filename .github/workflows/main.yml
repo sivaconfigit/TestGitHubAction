@@ -23,4 +23,4 @@ jobs:
           done
         env:
           TZ: UTC
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}

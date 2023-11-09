@@ -1,0 +1,24 @@
+name: Delete Branches
+on:
+  schedule:
+    - cron: '30 6 * * *'   # Schedule it daily (adjust the schedule as needed)
+ 
+jobs:
+  delete-branches:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+ 
+      - name: Delete branches
+        run: |
+          # Define a list of branches you want to exclude from deletion
+          EXCLUDE_BRANCHES=("main" "master" "develop" "release")
+ 
+          for branch in $(git for-each-ref --format '%(refname:short)' refs/heads/); do
+            if [[ ! " ${EXCLUDE_BRANCHES[*]} " =~ " ${branch} " ]]; then
+              git push origin --delete $branch
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

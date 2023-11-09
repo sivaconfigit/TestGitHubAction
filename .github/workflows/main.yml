@@ -1,7 +1,7 @@
 name: Delete Branches
 on:
   schedule:
-    - cron: '30 6 * * *'   # Schedule it daily (adjust the schedule as needed)
+     - cron: '4 6 * * *'    # Schedule it daily (adjust the schedule as needed)
  
 jobs:
   delete-branches:

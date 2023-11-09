@@ -2,7 +2,7 @@ name: Delete Branches
 
 on:
   schedule:
-    - cron: '40 9 * * *'
+    - cron: '25 15 * * *'
   workflow_dispatch:
 
 jobs:
@@ -13,10 +13,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Check Excluded Branches
+        run: |
+          EXCLUDE_BRANCHES=("main" "master")
+          echo "Excluded branches: ${EXCLUDE_BRANCHES[@]}"
+
       - name: Delete branches
         run: |
           EXCLUDE_BRANCHES=("main" "master")
- 
+        
           for branch in $(git for-each-ref --format '%(refname:short)' refs/heads/); do
             if [[ ! " ${EXCLUDE_BRANCHES[*]} " =~ " ${branch} " ]]; then
               git push origin --delete $branch

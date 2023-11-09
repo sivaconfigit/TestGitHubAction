@@ -1,8 +1,6 @@
 name: Delete Stale Branches
 
 on:
-  schedule:
-    - cron: '52 16 * * *'
   workflow_dispatch:
 
 

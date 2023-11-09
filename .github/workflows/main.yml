@@ -1,13 +1,11 @@
-name: Delete abandoned branches
+
+name: Delete Branches
 
 on:
-  # Run daily at midnight
   schedule:
-    - cron: "0 0 * * *"
-
-  # Allow workflow to be manually run from the GitHub UI
+    - cron: '25 15 * * *'
   workflow_dispatch:
-
+  
 jobs:
   cleanup_old_branches:
     runs-on: ubuntu-latest

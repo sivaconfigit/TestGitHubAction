@@ -2,7 +2,7 @@ name: Delete Stale Branches
 
 on:
   schedule:
-    - cron: '25 15 * * *'
+    - cron: '28 10 * * *'
   workflow_dispatch:
 
 jobs:
@@ -21,3 +21,5 @@ jobs:
         stale-branch-label: 'stale branch 🗑️'
         compare-branches: 'info'
         branches-filter-regex: '^(?!main$).*$'  # Exclude the 'main' branch
+    env:
+        TZ: Asia/Kolkata

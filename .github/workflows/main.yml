@@ -1,23 +1,23 @@
 name: Delete Branches
-
+ 
 on:
   push:
     branches:
       - master
       - main
   workflow_dispatch:
+ 
 jobs:
-  stale_branches:
+  cleanup_old_branches:
     runs-on: ubuntu-latest
     steps:
-    - name: Stale Branches
-      uses: crs-k/stale-branches@v3.0.0
-      with:
-        repo-token: '${{ secrets.GITHUB_TOKEN }}'
-        last_commit_age_days: 0
-        comment-updates: false
-        max-issues: 20
-        tag-committer: false
-        stale-branch-label: 'stale branch 🗑️'
-        compare-branches: 'info'
-        branches-filter-regex: '^((?!dependabot))'
+      - name: Delete branches with no commits in the last 0 days
+        uses: phpdocker-io/github-actions-delete-abandoned-branches@v2
+        id: delete_stuff
+        with:
+          github_token: ${{ secrets.SECRETS_TOKEN }}
+          last_commit_age_days: 0
+          ignore_branches: main,master
+          dry_run: no
+      - name: Get output
+        run: "echo 'Deleted branches: $(git branch -r)'"

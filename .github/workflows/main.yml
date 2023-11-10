@@ -1,27 +1,23 @@
-
 name: Delete Branches
 
 on:
-  push:
-    branches:
-      - master
-      - main
-  schedule:
-    - cron: '25 10 * * *'
+  workflow_dispatch:
 
 jobs:
-  cleanup_old_branches:
-    runs-on: ubuntu-latest
+  delete-branches:
+    runs-on: windows-latest
+
     steps:
-      - name: Delete branches with no commits in the last 0 days
-        uses: phpdocker-io/github-actions-delete-abandoned-branches@v2
-        id: delete_stuff
-        with:
-          github_token: ${{ secrets.SECRETS_TOKEN }}
-          last_commit_age_days: 0
-          ignore_branches: main,master
-          dry_run: no
- 
- 
-      - name: Get output
-        run: "echo 'Deleted branches: $(git branch -r)'"
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Delete branches
+        run: |
+          EXCLUDE_BRANCHES=("main" "master" "develop" "release" "dummy-branch-1" "dummy-branch-2" "dummy-branch-3" "dummy-branch-4" "dummy-branch-5")
+          for branch in $(git for-each-ref --format '%(refname:short)' refs/heads/); do
+            if [[ ! " ${EXCLUDE_BRANCHES[*]} " =~ " ${branch} " ]]; then
+              git push origin --delete $branch
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}

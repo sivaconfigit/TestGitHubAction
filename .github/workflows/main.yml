@@ -11,6 +11,12 @@ jobs:
   cleanup_old_branches:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug Info
+        run: |
+           echo "Repository: $GITHUB_REPOSITORY"
+           echo "Branches: $(git branch -a)"
+           echo "Default Branch: $(git remote show origin | grep 'HEAD branch' | awk '{print $NF}')"
+
       - name: Delete branches with no commits in the last 0 days
         uses: phpdocker-io/github-actions-delete-abandoned-branches@v2
         id: delete_stuff

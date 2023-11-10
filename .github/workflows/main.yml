@@ -10,18 +10,22 @@ on:
     - cron: '25 15 * * *'
 
 jobs:
-  cleanup_old_branches:
+  delete-branches:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Delete branches with no commits in the last 0 days
-        uses: phpdocker-io/github-actions-delete-abandoned-branches@v2
-        id: delete_stuff
-        with:
-          github_token: ${{ secrets.SECRETS_TOKEN }}
-          last_commit_age_days: 0
-          ignore_branches: main,master
-          dry_run: no
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-
-      - name: Get output
-        run: "echo 'Deleted branches: $(git branch -r)'"
+      - name: Delete branches
+        run: |
+          EXCLUDE_BRANCHES=("main" "master")
+ 
+          for branch in $(git for-each-ref --format '%(refname:short)' refs/heads/); do
+            if [[ ! " ${EXCLUDE_BRANCHES[*]} " =~ " ${branch} " ]]; then
+              git push origin --delete $branch
+            fi
+          done
+        env:
+          TZ: UTC
+          GITHUB_TOKEN: ${{ secrets.SECRETS_TOKEN }}

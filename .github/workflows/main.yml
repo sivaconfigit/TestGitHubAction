@@ -17,7 +17,7 @@ jobs:
         uses: phpdocker-io/github-actions-delete-abandoned-branches@v2
         id: delete_stuff
         with:
-          github_token: ${{ secrets.SECRETS_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           last_commit_age_days: 0
           ignore_branches: main,master
           dry_run: no

@@ -1,39 +1,29 @@
-name: Delete Branches
+name: Delete abandoned branches
 
 on:
-  push:
-    branches:
-      - master
-      - main
+  # Run daily at midnight
+  schedule:
+    - cron: "0 0 * * *"
+
+  # Allow workflow to be manually run from the GitHub UI
   workflow_dispatch:
 
 jobs:
   cleanup_old_branches:
     runs-on: ubuntu-latest
+    name: Satisfy my repo CDO
     steps:
-      - name: Setup Git Repository
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git init
-          git remote add origin "https://github.com/${{ github.repository }}"
-          git fetch --depth=1 origin "+refs/heads/*:refs/remotes/origin/*"
-          git checkout -b main origin/main
-
-      - name: Debug Info
-        run: |
-          echo "Repository: $GITHUB_REPOSITORY"
-          echo "Branches: $(git branch -a)"
-          echo "Default Branch: $(git remote show origin | grep 'HEAD branch' | awk '{print $NF}')"
-
-      - name: Delete branches with no commits in the last 0 days
+      - name: Delete those pesky dead branches
         uses: phpdocker-io/github-actions-delete-abandoned-branches@v2
         id: delete_stuff
         with:
-          github_token: ${{ secrets.SECRETS_TOKEN }}
-          last_commit_age_days: 0
-          ignore_branches: main,master
+          github_token: ${{ github.token }}
+          last_commit_age_days: 100
+          ignore_branches: next-version,dont-deleteme
+          github_base_url: https://github.mycompany.com/api/v3
+
+          # Disable dry run and actually get stuff deleted
           dry_run: no
 
       - name: Get output
-        run: "echo 'Deleted branches: $(git branch -r)'"
+        run: "echo 'Deleted branches: ${{ steps.delete_stuff.outputs.deleted_branches }}'"

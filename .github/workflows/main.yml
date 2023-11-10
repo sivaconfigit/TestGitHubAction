@@ -14,8 +14,7 @@ jobs:
       uses: crs-k/stale-branches@v3.0.0
       with:
         repo-token: '${{ secrets.GITHUB_TOKEN }}'
-        days-before-stale: 1
-        days-before-delete: 0
+        last_commit_age_days: 0
         comment-updates: false
         max-issues: 20
         tag-committer: false

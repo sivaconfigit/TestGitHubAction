@@ -17,10 +17,10 @@ jobs:
         uses: phpdocker-io/github-actions-delete-abandoned-branches@v2
         id: delete_stuff
         with:
-          github_token: ${{ github.token }}
-          last_commit_age_days: 100
-          ignore_branches: next-version,dont-deleteme
-          github_base_url: https://github.mycompany.com/api/v3
+          github_token: ${{ github.SECRETS_TOKEN }}
+          last_commit_age_days: 1
+          ignore_branches: main,deploy
+          github_base_url: https://github.com/ThaslimaConfigit/TestGitHubAction.git
 
           # Disable dry run and actually get stuff deleted
           dry_run: no
